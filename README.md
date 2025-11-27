@@ -1,227 +1,266 @@
- **AI Football Analysis System**
+⚽ AI Football Analysis System
 
+A complete computer vision + analytics pipeline for football match analysis, featuring YOLO-based detection, ByteTrack tracking, team identification, pass detection, match statistics, action suggestions, visual overlays, zone heatmaps, and passing network graphs.
 
-Advanced computer vision pipeline for football match analysis using YOLO, ByteTrack, color clustering, optical flow, and deep analytics.
+This system brings together Computer Vision, Machine Learning, Optical Flow, Color Clustering, Data Analytics, and Sports Intelligence into one unified platform.
 
+📌 Overview
 
-** Overview**
+This project performs end-to-end automated football match analysis:
 
-This project performs end-to-end football match analysis, including:
+⚽ Player, referee & ball detection using YOLOv8
 
+➿ Multi-object tracking using ByteTrack
 
- Player, referee & ball detection using YOLO
+🎽 Team assignment using K-Means color clustering
 
+🟢 Ball possession tracking
 
- Multi-object tracking using ByteTrack
+🎯 Event detection (passes, shots, interceptions)
 
+📈 Player & team performance analytics
 
- Automatic team assignment using K-Means color clustering
+🌍 Perspective transformation (pixel → real-world coordinates)
 
+🏃‍♂️ Speed & distance estimation per player
 
- Ball possession tracking
+🎥 Advanced visual overlays (IDs, trails, arrows, speed, distance)
 
+🗺 Zone analysis (ball presence & player density heatmaps)
 
- Pass, shot & interception event detection
+🔗 Passing network analysis (centrality, adjacency, graph visuals)
 
+🧠 AI action suggestions (best pass/dribble/shot options)
 
- Comprehensive player and team statistics
+This system is modular, optimized, and designed to run on any football broadcast video.
 
-
- Perspective transformation for real-world measurements
-
-
- Speed & distance estimation
-
-
- Advanced match visualizations (badges, trails, arrows, overlays)
-
-
- Zone analysis (ball presence & player density)
-
-
- Passing network analysis (graph, centrality, heatmaps)
-
-
- AI Action Suggestions (intelligent pass/dribble/shot recommendations)
-
-
-This system integrates Computer Vision, Machine Learning, Data Analytics, and Sports Intelligence into one unified workflow.
-
-
-**Project Architecture**
-
+🏗️ Project Architecture
 football_analysis/
-
-
 │
-├── ai_module/                  # Action suggestion system
-├── analysis/                   # CSV → statistics → visualizations
-├── camera_movement_estimator/  # Optical flow–based camera motion
-├── team_assigner/              # K-Means color clustering
-├── trackers/                   # YOLO + ByteTrack tracking pipeline
-├── view_transformer/           # Perspective transformation
-├── utils/                      # Video utils, bbox utils
-├── visualization.py            # Advanced overlays, pass arrows, trails
-├── main.py                     # Main pipeline (run this)
-└── stubs/                      # Pre-generated tracking/camera stubs
+├── ai_module/                 # Action suggestion engine
+├── analysis/                  # CSV → statistics → charts
+├── camera_movement_estimator/ # Optical-flow-based camera motion correction
+├── team_assigner/             # K-Means color clustering for team detection
+├── trackers/                  # YOLOv8 + ByteTrack tracking pipeline
+├── view_transformer/          # Perspective transform (pixel → meters)
+├── utils/                     # Video I/O, bbox utils
+├── visualization.py           # Overlays (IDs, trails, passes, etc.)
+├── main.py                    # Main pipeline (run this)
+└── stubs/                     # Pre-generated tracking/camera stubs (no model needed)
 
+⭐ Key Features
+🔹 1. Player, Referee & Ball Detection
 
+YOLOv8s via ultralytics
 
-**⭐ Key Features**
+Detection → supervision.Detections
 
-**1️ Player & Ball Detection**
+Clean bounding box extraction
 
+🔹 2. Multi-Object Tracking
 
-Uses YOLOv8s (ultralytics)
+ByteTrack for persistent player IDs
 
+Smooth tracking even with rapid motion
 
-Converts detections to supervision.Detections
+Automatic handling of lost & reappearing players
 
+🔹 3. Team Assignment (K-Means)
 
-Tracks objects across frames using ByteTrack
+Multi-frame sampling of jersey pixels
 
+Clustering into Team 1 & Team 2
 
-**2️ Team Assignment**
+Automatic team color extraction
 
+Extremely robust across lighting & camera shifts
 
-K-Means color clustering
+🔹 4. Camera Movement Estimation
 
+Lucas–Kanade optical flow
 
-Multi-frame sampling for robustness
+Frame-to-frame camera shift vector
 
+Ensures accurate player speed / distance measurement
 
-Produces team ID + team color for each player
+🔹 5. Perspective Transformation
 
+Homography-based top-down projection
 
-**3️ Camera Movement Estimation**
+Converts pixel coordinates → meters
 
+Enables accurate speed (km/h) & distance (m) calculations
 
--Sparse optical flow
+🔹 6. Speed & Distance Estimation
 
--Stabilizes positions for accurate speed estimation
+Per-frame movement tracking
 
-**4️ Perspective Transformation**
-
-- Maps pixel positions to real-world coordinates.
-
-**5️ Speed & Distance Estimation**
-
-Uses transformed points to compute:
-m/s
-km/h
-distance traveled
-
-**6️ Ball Possession Tracking**
-
-Assigns ball to nearest player per frame
 Computes:
-per-frame possession
-total % possession per team
 
-**7️ Event Detection System**
+Speed (m/s & km/h)
+
+Distance traveled (meters)
+
+Smooth trajectory paths
+
+🔹 7. Ball Possession Detection
+
+Ball → nearest player assignment
+
+Computes:
+
+Frame-by-frame possession
+
+Team possession %
+
+Possession timeline overlay on video
+
+🔹 8. Event Detection (AI-based)
 
 Detects:
-successful passes
-interceptions
-shots
-pass trajectories
-Outputs → events.csv
 
-**8️ AI Action Suggestions**
+Passes
 
-For each frame, system evaluates:
-pass options
-shot possibilities
-dribble opportunities
-Scores actions using heuristic models
-receiver open space
-passing lane clearance
-positional advantage
-distance / risk evaluation
+Interceptions
 
-**9️ Advanced Visual Overlays**
-The visualization module renders:
-ID badges with team colors
-speed & distance text
-trails showing movement
-pass arrows
-shot markers
-camera movement overlay
-team legends
+Shots
 
- **10.Analytics & Reports**
-1.CSV Outputs
-2.Player stats
-3.Team stats
-3.Event logs
-4.Pass success & distance reports
-5.Visual Charts
-6.Pass completion chart
-7.Team comparison
-8.Pass distance histogram + boxplot
-9.Time-based pass activity
-10.Zone Analysis
-11.Ball presence heatmap
-12.Player density heatmap
-13.Passing Network
-14.Directed weighted graph
-15.Node centrality metrics
-16.Top passers
-17.Adjacency matrices
-18.Interactive HTML graph (optional)
+Pass trajectory distances
 
-** Installation**
-1. Create virtual environment
-   
+Pass speeds
+
+Outputs to:
+📄 events.csv
+
+🔹 9. AI Action Suggestions
+
+For each frame, evaluates:
+
+Best pass option
+
+Best dribble direction
+
+Best shot opportunity
+
+Considers:
+
+Open passing lanes
+
+Opponent proximity
+
+Field advantage
+
+Risk vs reward
+
+Distance & angle
+
+Receiver availability
+
+🔹 10. Advanced Visual Overlays
+
+Rendered on video:
+
+Team-colored player ID badges
+
+Speed & distance values
+
+Movement trails
+
+Pass arrows (successful & intercepted)
+
+Shot markers
+
+Camera movement overlay
+
+Team legend
+
+🔹 11. Analytics & Reporting
+📊 CSV Outputs
+
+player_statistics.csv
+
+events.csv
+
+comprehensive_stats_report.json
+
+📈 Visual Charts
+
+Pass completion by player
+
+Team comparison
+
+Pass distance distribution
+
+Passes over time
+
+🗺 Zone Analysis
+
+Ball presence heatmap
+
+Player density heatmap
+
+🔗 Passing Network
+
+Adjacency matrices
+
+Network graphs
+
+Centrality analysis (degree, betweenness, pagerank)
+
+Top passers
+
+Interactive HTML visualizations
+
+⚙️ Installation
+1️⃣ Create virtual environment
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 
-2. Install dependencies
-   pip install -r requirements.txt
+2️⃣ Install dependencies
+pip install -r requirements.txt
 
-**Running the Project**
-**Run the full pipeline**
+▶️ Running the Project
+🟢 Run full pipeline
 python main.py --video input_videos/match.mp4 --resize_width 720
 
-**Generate full analysis suite**
+🟡 Generate all analytics
 python analysis/run_all_analysis.py
 
-**Output Structure**
+📁 Output Structure
 outputs/
-├── videos/                        # Final annotated video
-├── analysis/                      # CSV + JSON stats
-├── visualizations/                # Graphs & plots
-├── zone_analysis/                 # Heatmaps
-├── pass_network_outputs/          # Network graphs + JSON
-└── debug/                         # First annotated frame
+├── videos/                  # Final annotated video
+├── analysis/                # CSV + JSON stats
+├── visualizations/          # Graphs & plots
+├── zone_analysis/           # Heatmaps
+├── pass_network_outputs/    # Network graphs + adj matrices
+└── debug/                   # First annotated frame
 
-
- **Debug & Tools**
-1. View first annotated frame
+🧪 Debug Tools
+Check annotated frame
 python debug_inspect.py --events output_videos/events.csv
 
-2. Test video decoding
+Test video decoding
 python test_read_video.py --video input_videos/sample.mp4
 
-3. Visual regression test
+Test visualization rendering
 python visual_test_small.py
 
+📚 References
 
-** References**
+YOLOv8 – Ultralytics
 
-YOLOv8 — Ultralytics
+ByteTrack – Multi-object tracking
 
-ByteTrack — Multi-object tracking
+OpenCV Optical Flow – Lucas–Kanade
 
-Optic Flow — Lucas-Kanade
+OpenCV Homography – Perspective transform
 
-OpenCV Homography
+📝 License
 
-**📜 License**
+This project is licensed under the MIT License.
 
-This project is released under the MIT License.
+👤 Author
 
-**🙌 Author**
-
-**Prakhar Gupta
-AI/ML Engineering • Computer Vision • Sports Analytics**
+Prakhar Gupta
+AI/ML Engineer
+Computer Vision • Deep Learning • Sports Analytics
