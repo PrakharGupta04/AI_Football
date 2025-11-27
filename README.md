@@ -1,39 +1,58 @@
  **AI Football Analysis System**
 
+
 Advanced computer vision pipeline for football match analysis using YOLO, ByteTrack, color clustering, optical flow, and deep analytics.
 
-** Overview
-**
+
+** Overview**
+
 This project performs end-to-end football match analysis, including:
+
 
  Player, referee & ball detection using YOLO
 
+
  Multi-object tracking using ByteTrack
+
 
  Automatic team assignment using K-Means color clustering
 
+
  Ball possession tracking
+
 
  Pass, shot & interception event detection
 
+
  Comprehensive player and team statistics
+
 
  Perspective transformation for real-world measurements
 
+
  Speed & distance estimation
+
 
  Advanced match visualizations (badges, trails, arrows, overlays)
 
+
  Zone analysis (ball presence & player density)
+
 
  Passing network analysis (graph, centrality, heatmaps)
 
+
  AI Action Suggestions (intelligent pass/dribble/shot recommendations)
+
 
 This system integrates Computer Vision, Machine Learning, Data Analytics, and Sports Intelligence into one unified workflow.
 
+
 **Project Architecture**
+
 football_analysis/
+
+
 │
 ├── ai_module/                  # Action suggestion system
 ├── analysis/                   # CSV → statistics → visualizations
@@ -46,31 +65,44 @@ football_analysis/
 ├── main.py                     # Main pipeline (run this)
 └── stubs/                      # Pre-generated tracking/camera stubs
 
+
+
 **⭐ Key Features**
+
 **1️ Player & Ball Detection**
 
-Uses YOLOv8 (ultralytics)
+
+Uses YOLOv8s (ultralytics)
+
 
 Converts detections to supervision.Detections
 
+
 Tracks objects across frames using ByteTrack
+
 
 **2️ Team Assignment**
 
+
 K-Means color clustering
+
 
 Multi-frame sampling for robustness
 
+
 Produces team ID + team color for each player
+
 
 **3️ Camera Movement Estimation**
 
-Sparse optical flow
-Stabilizes positions for accurate speed estimation
+
+-Sparse optical flow
+
+-Stabilizes positions for accurate speed estimation
 
 **4️ Perspective Transformation**
 
-Maps pixel positions to real-world coordinates.
+- Maps pixel positions to real-world coordinates.
 
 **5️ Speed & Distance Estimation**
 
