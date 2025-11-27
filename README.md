@@ -1,93 +1,195 @@
-# Football Analysis Project
+ **AI Football Analysis System**
 
-## Introduction
-The goal of this project is to detect and track players, referees, and footballs in a video using YOLO, one of the best AI object detection models available. We will also train the model to improve its performance. Additionally, we will assign players to teams based on the colors of their t-shirts using Kmeans for pixel segmentation and clustering. With this information, we can measure a team's ball acquisition percentage in a match. We will also use optical flow to measure camera movement between frames, enabling us to accurately measure a player's movement. Furthermore, we will implement perspective transformation to represent the scene's depth and perspective, allowing us to measure a player's movement in meters rather than pixels. Finally, we will calculate a player's speed and the distance covered. This project covers various concepts and addresses real-world problems, making it suitable for both beginners and experienced machine learning engineers.
+Advanced computer vision pipeline for football match analysis using YOLO, ByteTrack, color clustering, optical flow, and deep analytics.
 
-![Screenshot](output_videos/screenshot.png)
+** Overview
+**
+This project performs end-to-end football match analysis, including:
 
-## Modules Used
-The following modules are used in this project:
-- YOLO: AI object detection model
-- Kmeans: Pixel segmentation and clustering to detect t-shirt color
-- Optical Flow: Measure camera movement
-- Perspective Transformation: Represent scene depth and perspective
-- Speed and distance calculation per player
+ Player, referee & ball detection using YOLO
 
-## Trained Models
-- [Trained Yolo v5](https://drive.google.com/file/d/1DC2kCygbBWUKheQ_9cFziCsYVSRw6axK/view?usp=sharing)
+ Multi-object tracking using ByteTrack
 
-## Sample video
--  [Sample input video](https://drive.google.com/file/d/1t6agoqggZKx6thamUuPAIdN_1zR9v9S_/view?usp=sharing)
+ Automatic team assignment using K-Means color clustering
 
-## Requirements
-To run this project, you need to have the following requirements installed:
-- Python 3.x
-- ultralytics
-- supervision
-- OpenCV
-- NumPy
-- Matplotlib
-- Pandas
+ Ball possession tracking
 
-## Quick Start
+ Pass, shot & interception event detection
 
-1. Create and activate a virtual environment (recommended):
+ Comprehensive player and team statistics
 
-   Windows PowerShell:
-   ```powershell
-   cd C:\Users\praba\OneDrive\Desktop\AI_Football\football_analysis
-   python -m venv .venv
-   .\.venv\Scripts\Activate.ps1
-   ```
+ Perspective transformation for real-world measurements
 
-2. Install dependencies:
-   ```powershell
+ Speed & distance estimation
+
+ Advanced match visualizations (badges, trails, arrows, overlays)
+
+ Zone analysis (ball presence & player density)
+
+ Passing network analysis (graph, centrality, heatmaps)
+
+ AI Action Suggestions (intelligent pass/dribble/shot recommendations)
+
+This system integrates Computer Vision, Machine Learning, Data Analytics, and Sports Intelligence into one unified workflow.
+
+**Project Architecture**
+football_analysis/
+│
+├── ai_module/                  # Action suggestion system
+├── analysis/                   # CSV → statistics → visualizations
+├── camera_movement_estimator/  # Optical flow–based camera motion
+├── team_assigner/              # K-Means color clustering
+├── trackers/                   # YOLO + ByteTrack tracking pipeline
+├── view_transformer/           # Perspective transformation
+├── utils/                      # Video utils, bbox utils
+├── visualization.py            # Advanced overlays, pass arrows, trails
+├── main.py                     # Main pipeline (run this)
+└── stubs/                      # Pre-generated tracking/camera stubs
+
+**⭐ Key Features**
+**1️ Player & Ball Detection**
+
+Uses YOLOv8 (ultralytics)
+
+Converts detections to supervision.Detections
+
+Tracks objects across frames using ByteTrack
+
+**2️ Team Assignment**
+
+K-Means color clustering
+
+Multi-frame sampling for robustness
+
+Produces team ID + team color for each player
+
+**3️ Camera Movement Estimation**
+
+Sparse optical flow
+Stabilizes positions for accurate speed estimation
+
+**4️ Perspective Transformation**
+
+Maps pixel positions to real-world coordinates.
+
+**5️ Speed & Distance Estimation**
+
+Uses transformed points to compute:
+m/s
+km/h
+distance traveled
+
+**6️ Ball Possession Tracking**
+
+Assigns ball to nearest player per frame
+Computes:
+per-frame possession
+total % possession per team
+
+**7️ Event Detection System**
+
+Detects:
+successful passes
+interceptions
+shots
+pass trajectories
+Outputs → events.csv
+
+**8️ AI Action Suggestions**
+
+For each frame, system evaluates:
+pass options
+shot possibilities
+dribble opportunities
+Scores actions using heuristic models
+receiver open space
+passing lane clearance
+positional advantage
+distance / risk evaluation
+
+**9️ Advanced Visual Overlays**
+The visualization module renders:
+ID badges with team colors
+speed & distance text
+trails showing movement
+pass arrows
+shot markers
+camera movement overlay
+team legends
+
+ **10.Analytics & Reports**
+1.CSV Outputs
+2.Player stats
+3.Team stats
+3.Event logs
+4.Pass success & distance reports
+5.Visual Charts
+6.Pass completion chart
+7.Team comparison
+8.Pass distance histogram + boxplot
+9.Time-based pass activity
+10.Zone Analysis
+11.Ball presence heatmap
+12.Player density heatmap
+13.Passing Network
+14.Directed weighted graph
+15.Node centrality metrics
+16.Top passers
+17.Adjacency matrices
+18.Interactive HTML graph (optional)
+
+** Installation**
+1. Create virtual environment
+   
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+
+2. Install dependencies
    pip install -r requirements.txt
-   ```
 
-3. Add required assets:
-   - Input video: place a football match video at `input_videos/08fd33_4.mp4`.
-     - You can use the provided sample: see link in Sample video above.
-   - Model weights (optional for stubbed run): place YOLO weights at `models/best.pt` if you want to run real detections. The default `main.py` is configured to use pre-generated stubs, so weights are not required to produce an example output.
+**Running the Project**
+**Run the full pipeline**
+python main.py --video input_videos/match.mp4 --resize_width 720
 
-4. Run the project:
-   ```powershell
-   python main.py
-   ```
+**Generate full analysis suite**
+python analysis/run_all_analysis.py
 
-5. Output:
-   - The annotated video will be saved to `output_videos/output_video.avi`.
+**Output Structure**
+outputs/
+├── videos/                        # Final annotated video
+├── analysis/                      # CSV + JSON stats
+├── visualizations/                # Graphs & plots
+├── zone_analysis/                 # Heatmaps
+├── pass_network_outputs/          # Network graphs + JSON
+└── debug/                         # First annotated frame
 
-## Notes
 
-- The tracker is configured to use precomputed stubs by default (`stubs/track_stubs.pkl` and `stubs/camera_movement_stub.pkl`). This allows running without downloading large model files.
-- To run full detection instead of stubs, ensure `models/best.pt` exists and change `read_from_stub=False` in `main.py` where `Tracker.get_object_tracks(...)` is called, and similarly disable stub usage for the camera movement estimator.
+ **Debug & Tools**
+1. View first annotated frame
+python debug_inspect.py --events output_videos/events.csv
 
-## Troubleshooting
+2. Test video decoding
+python test_read_video.py --video input_videos/sample.mp4
 
-- If you see an error about a missing input video, ensure you have added a video at `input_videos/08fd33_4.mp4`.
-- If you encounter import errors, make sure you activated the virtual environment and installed requirements.
-- For GPU acceleration, install the CUDA-enabled PyTorch per the official guide and reinstall `torch`, `torchvision`, and `torchaudio` accordingly.
+3. Visual regression test
+python visual_test_small.py
 
-## Debug & Tuning Toolkit
 
-- **Polished pipeline command** (from `football_analysis/`):
-  ```powershell
-  python main.py --video input_videos/08fd33_4_small.mp4 --resize_width 720
-  ```
-- **Key tuning knobs** (pass as CLI args to `main.py`):
-  - `--pass_dist_thresh`, `--pass_speed_thresh`, `--shot_speed_thresh`
-  - `--sender_lookup_window`, `--receiver_lookup_window`
-  - `--min_receiver_proximity`, `--min_ball_travel_for_pass`
-  - `--trail_length`, `--meters_per_pixel`, `--motion_smooth_window`
-- **Debug artifacts**:
-  - `debug_first_annotated_frame.jpg` — inspect badge placement, colors, overlays.
-  - `output_videos/events.csv` (and automatic `events_alt.csv` fallback) — check the first 20 rows with:
-    ```powershell
-    python debug_inspect.py --events output_videos/events.csv
-    ```
-- **Video IO smoke test**:
-  ```powershell
-  python test_read_video.py --video input_videos/08fd33_4_small.mp4
-  ```
-  Saves `output_videos/test_read_video_first_frame.jpg` so you can confirm decoding without running the full pipeline.
+** References**
+
+YOLOv8 — Ultralytics
+
+ByteTrack — Multi-object tracking
+
+Optic Flow — Lucas-Kanade
+
+OpenCV Homography
+
+**📜 License**
+
+This project is released under the MIT License.
+
+**🙌 Author**
+
+**Prakhar Gupta
+AI/ML Engineering • Computer Vision • Sports Analytics**
