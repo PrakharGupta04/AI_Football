@@ -11,19 +11,34 @@ from utils import get_center_of_bbox, get_bbox_width, get_foot_position
 
 class Tracker:
     def __init__(self, model_path):
-        self.model = YOLO(model_path) 
+        # Delay heavy model initialization until we actually need to run detection.
+        # This allows running the pipeline with stubs without downloading model weights.
+        self.model_path = model_path
+        self.model = None
         self.tracker = sv.ByteTrack()
 
-    def add_position_to_tracks(sekf,tracks):
-        for object, object_tracks in tracks.items():
+    def add_position_to_tracks(self, tracks):
+        """
+        Ensure every track entry has stable position fields.
+        - position_center: bbox center
+        - position: foot position for players/referees, center for ball
+        - position_adjusted: initialized to position (later overwritten by camera/view transforms)
+        """
+        for object_name, object_tracks in tracks.items():
             for frame_num, track in enumerate(object_tracks):
                 for track_id, track_info in track.items():
-                    bbox = track_info['bbox']
-                    if object == 'ball':
-                        position= get_center_of_bbox(bbox)
+                    bbox = track_info.get('bbox')
+                    center = get_center_of_bbox(bbox) if bbox is not None else (None, None)
+
+                    if object_name == 'ball':
+                        position = center
                     else:
-                        position = get_foot_position(bbox)
-                    tracks[object][frame_num][track_id]['position'] = position
+                        foot = get_foot_position(bbox) if bbox is not None else (None, None)
+                        position = foot if foot[0] is not None else center
+
+                    tracks[object_name][frame_num][track_id]['position_center'] = center
+                    tracks[object_name][frame_num][track_id]['position'] = position
+                    tracks[object_name][frame_num][track_id].setdefault('position_adjusted', position)
 
     def interpolate_ball_positions(self,ball_positions):
         ball_positions = [x.get(1,{}).get('bbox',[]) for x in ball_positions]
@@ -38,10 +53,12 @@ class Tracker:
         return ball_positions
 
     def detect_frames(self, frames):
-        batch_size=20 
+        if self.model is None:
+            self.model = YOLO(self.model_path)
+        batch_size = 20 
         detections = [] 
-        for i in range(0,len(frames),batch_size):
-            detections_batch = self.model.predict(frames[i:i+batch_size],conf=0.1)
+        for i in range(0, len(frames), batch_size):
+            detections_batch = self.model.predict(frames[i:i+batch_size], conf=0.1)
             detections += detections_batch
         return detections
 

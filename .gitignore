@@ -1,2 +1,39 @@
-*__pycahce__*
+﻿# Python / virtual env
+.venv/
+venv/
+__pycache__/
 *.pyc
+*.pyo
+*.pyd
+*.swp
+
+# IDE/editor
+.vscode/
+.idea/
+
+# Data / outputs / models / video (DO NOT upload)
+input_videos/
+output_videos/
+outputs/
+pass_network_outputs/
+models/
+*.pt
+*.pth
+*.pkl
+*.h5
+*.ckpt
+*.mp4
+*.avi
+
+# Notebooks
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs/build
+*.log
+dist/
+build/
+*.egg-info/
